@@ -6,9 +6,15 @@
  */
 const Logger = (req, res, next) => {
   const date = new Date();
+  const formatted = (number) => {
+    return number > 9
+      ? number
+      : '0' + number
+  };
+
   const info = `${req.method} :: ${req.originalUrl}`;
   console.log(
-    `[LOG ${date.getDate()}-${date.getMonth()}-${date.getYear()}-${date.getHours()}-${date.getMinutes()}-${date.getSeconds()}]:`, info  
+    `[LOG_${formatted(date.getDate())}-${formatted(date.getMonth() + 1)}-${date.getFullYear()}_${formatted(date.getHours())}:${formatted(date.getMinutes())}:${formatted(date.getSeconds())}]:`, info  
   );
   next();
 };

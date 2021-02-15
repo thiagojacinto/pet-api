@@ -4,7 +4,8 @@
   "description": "API for PET Store services scheduling",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "start": "nodemon src/index.js",
+    "test": "node test/main.spec.js"
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,9 @@
   "homepage": "https://github.com/thiagojacinto/pet-api#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
   }
 }

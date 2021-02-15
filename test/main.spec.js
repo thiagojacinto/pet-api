@@ -34,6 +34,7 @@ test
     service: "Cleaning",
     status: "initialized",
     isFinalized: false,
+    createdAt: "16-01-2021"
   })
   .expect(201)
   .expect({ client: "Client n.1", pet: "Abdiel" })

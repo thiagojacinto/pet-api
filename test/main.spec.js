@@ -232,6 +232,34 @@ test
     } else {
       console.log("Patch atendimento by inexistent ID :: Test passed.");
     }
+    // serverInstance.close((err) => {
+    //   if (err) console.error(err);
+    // });
+  });
+
+// PETS CONTROLLER
+
+/**
+ * GIVEN have a correct filled atendimento properties
+ * WHEN post it to /atendimentos
+ * THEN a new atendendimento must be created
+ */
+test
+  .post("/pets")
+  .send({
+    pet: "Lorem Ipsum",
+    imageUri: "/repo/images/img1.jpg"
+  })
+  .expect(201)
+  .expect(function (res) {
+    if (!("id" in res.body)) throw new Error("Missing id");
+  })
+  .end(function (err, res) {
+    if (err) {
+      console.log("Register Pet :: Test failed.", err);
+    } else {
+      console.log("Register Pet :: Test passed.");
+    }
     serverInstance.close((err) => {
       if (err) console.error(err);
     });

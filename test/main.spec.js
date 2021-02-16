@@ -15,7 +15,7 @@ test
   .expect(301)
   .end(function (err, res) {
     if (err) throw err;
-    console.log("Main :: Test passed.");
+    console.log("Main :: Redirect to /atendimento :: Test passed.");
   });
 
 /**
@@ -102,6 +102,77 @@ test
       console.log("Register atendimento :: Invalid createdAt :: Test failed.", err);
     } else {
       console.log("Register atendimento :: Invalid createdAt :: Test passed.");
+    }
+    // serverInstance.close((err) => {
+    //   if (err) console.error(err);
+    // });
+  });
+
+/**
+ * WHEN get /atendimento
+ * THEN returns a list of saved atendimentos
+ */
+test
+  .get("/atendimento")
+  .expect(200)
+  .expect(function (res) {
+    if (!Array.isArray(res.body)) throw new Error("Array was expected");
+    if (!res.body.every(item => item.id)) throw  new Error("Wrong Array of Atendimentos");
+  })
+  .end(function (err, res) {
+    if (err) {
+      console.log(
+        "List atendimentos :: Test failed.",
+        err
+      );
+    } else {
+      console.log("List atendimentos :: Return all registered :: Test passed.");
+    }
+    // serverInstance.close((err) => {
+    //   if (err) console.error(err);
+    // });
+  });
+
+/**
+ * GIVEN a registered atendimento with ID
+ * WHEN search for an ID at /atendimento/ID
+ * THEN returns the existent atendimento for that ID
+ */
+test
+  .get("/atendimento/3")
+  .expect(200)
+  .expect(function (res) {
+    if (res.body.id != 3)
+      throw new Error("Expected ID = 3");
+  })
+  .end(function (err, res) {
+    if (err) {
+      console.log("Search atendimento by ID :: Test failed.", err);
+    } else {
+      console.log("Search atendimento by ID :: Test passed.");
+    }
+    // serverInstance.close((err) => {
+    //   if (err) console.error(err);
+    // });
+  });
+
+/**
+ * GIVEN a non-registered atendimento ID
+ * WHEN search with that ID at /atendimento/ID
+ * THEN returns error 404 and empty object
+ */
+test
+  .get("/atendimento/3000")
+  .expect(404)
+  .expect(function (res) {
+    if (res.error.text !== "{}")
+      throw new Error("Expected empty object");
+  })
+  .end(function (err, res) {
+    if (err) {
+      console.log("Search atendimento by inexistent ID :: Test failed.", err);
+    } else {
+      console.log("Search atendimento by inexistent ID :: Test passed.");
     }
     serverInstance.close((err) => {
       if (err) console.error(err);

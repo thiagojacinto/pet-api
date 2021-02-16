@@ -4,6 +4,7 @@ class Tables {
     this.connection = connection;
 
     this.createAtendimentoTable();
+    this.createPetsTable();
   }
 
   createAtendimentoTable() {
@@ -18,6 +19,17 @@ class Tables {
           : console.log("SQL :: Table 'atentdimentos' successfully created.");
       } 
     );
+  }
+
+  createPetsTable() {
+    const sql =
+      "CREATE TABLE IF NOT EXISTS pets (id int NOT NULL AUTO_INCREMENT, pet varchar(50), imageUri varchar(200), PRIMARY KEY(id))";
+
+    this.connection.query(sql, (err) => {
+      err
+        ? console.log("SQL Error ::", err)
+        : console.log("SQL :: Table 'pets' successfully created.");
+    });
   }
 }
 

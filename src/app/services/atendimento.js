@@ -13,34 +13,25 @@ class Atendimento {
     const validationErrors = errors(newAtendimento);
 
     if (validationErrors.length) {
-      // res.status(400).json(validationErrors);
       return new Promise((resolve, reject) => {
         reject(validationErrors);
       });
     } else {
       return atendimentoRepository.add(newAtendimento);
-      // db.query(sql, postData, (err, result) => {
-      //   if (err) {
-      //     res.status(400).json(err);
-      //   } else {
-      //     postData.client = clientResult;
-      //     postData.id = result.insertId;
-      //     res.status(201).json(postData);
-      //   }
-      // });
     }
   }
 
-  listar(res) {
-    const sql = "SELECT * FROM atendimentos";
+  listar() {
+    return atendimentoRepository.list();
+    // const sql = "SELECT * FROM atendimentos";
 
-    db.query(sql, (err, result) => {
-      if (err) {
-        res.status(400).json(err);
-      } else {
-        res.status(200).json(result);
-      }
-    });
+    // db.query(sql, (err, result) => {
+    //   if (err) {
+    //     res.status(400).json(err);
+    //   } else {
+    //     res.status(200).json(result);
+    //   }
+    // });
   }
 
   listarPorId(id, res) {

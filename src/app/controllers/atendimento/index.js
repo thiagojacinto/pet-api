@@ -10,7 +10,9 @@ atendimentoRouter.patch('/:id', function (req, res) {
 });
 
 atendimentoRouter.get('/', function (req, res) {
-  Atendimento.listar(res);
+  Atendimento.listar()
+    .then(results => res.json(results))
+    .catch(err => res.status(400).json(err));
 });
 
 atendimentoRouter.get('/:id', function (req, res) {

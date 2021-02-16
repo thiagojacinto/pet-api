@@ -39,9 +39,9 @@ test
   })
   .end(function (err, res) {
     if (err) {
-      console.log("Register atendimento :: Test failed.", err);
+      console.log("/atendimento :: Register atendimento :: Test failed.", err);
     } else {
-      console.log("Register atendimento :: Test passed.");
+      console.log("/atendimento :: Register atendimento :: Test passed.");
     }
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
@@ -69,9 +69,14 @@ test
   })
   .end(function (err, res) {
     if (err) {
-      console.log("Register atendimento :: Invalid name :: Test failed.", err);
+      console.log(
+        "/atendimento :: Register atendimento :: Invalid name :: Test failed.",
+        err
+      );
     } else {
-      console.log("Register atendimento :: Invalid name :: Test passed.");
+      console.log(
+        "/atendimento :: Register atendimento :: Invalid name :: Test passed."
+      );
     }
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
@@ -99,9 +104,14 @@ test
   })
   .end(function (err, res) {
     if (err) {
-      console.log("Register atendimento :: Invalid createdAt :: Test failed.", err);
+      console.log(
+        "/atendimento :: Register atendimento :: Invalid createdAt :: Test failed.",
+        err
+      );
     } else {
-      console.log("Register atendimento :: Invalid createdAt :: Test passed.");
+      console.log(
+        "/atendimento :: Register atendimento :: Invalid createdAt :: Test passed."
+      );
     }
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
@@ -121,12 +131,11 @@ test
   })
   .end(function (err, res) {
     if (err) {
-      console.log(
-        "List atendimentos :: Test failed.",
-        err
-      );
+      console.log("/atendimento :: List atendimentos :: Test failed.", err);
     } else {
-      console.log("List atendimentos :: Return all registered :: Test passed.");
+      console.log(
+        "/atendimento :: List atendimentos :: Return all registered :: Test passed."
+      );
     }
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
@@ -147,9 +156,12 @@ test
   })
   .end(function (err, res) {
     if (err) {
-      console.log("Search atendimento by ID :: Test failed.", err);
+      console.log(
+        "/atendimento :: Search atendimento by ID :: Test failed.",
+        err
+      );
     } else {
-      console.log("Search atendimento by ID :: Test passed.");
+      console.log("/atendimento :: Search atendimento by ID :: Test passed.");
     }
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
@@ -170,9 +182,14 @@ test
   })
   .end(function (err, res) {
     if (err) {
-      console.log("Search atendimento by inexistent ID :: Test failed.", err);
+      console.log(
+        "/atendimento :: Search atendimento by inexistent ID :: Test failed.",
+        err
+      );
     } else {
-      console.log("Search atendimento by inexistent ID :: Test passed.");
+      console.log(
+        "/atendimento :: Search atendimento by inexistent ID :: Test passed."
+      );
     }
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
@@ -199,9 +216,14 @@ test
   })
   .end(function (err, res) {
     if (err) {
-      console.log("Patch atendimento by valid ID :: Test failed.", err);
+      console.log(
+        "/atendimento :: Patch atendimento by valid ID :: Test failed.",
+        err
+      );
     } else {
-      console.log("Patch atendimento by valid ID :: Test passed.");
+      console.log(
+        "/atendimento :: Patch atendimento by valid ID :: Test passed."
+      );
     }
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
@@ -228,9 +250,14 @@ test
   })
   .end(function (err, res) {
     if (err) {
-      console.log("Patch atendimento by inexistent ID :: Test failed.", err);
+      console.log(
+        "/atendimento :: Patch atendimento by inexistent ID :: Test failed.",
+        err
+      );
     } else {
-      console.log("Patch atendimento by inexistent ID :: Test passed.");
+      console.log(
+        "/atendimento :: Patch atendimento by inexistent ID :: Test passed."
+      );
     }
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
@@ -240,25 +267,26 @@ test
 // PETS CONTROLLER
 
 /**
- * GIVEN have a correct filled atendimento properties
- * WHEN post it to /atendimentos
- * THEN a new atendendimento must be created
+ * GIVEN have a correct filled Pet properties
+ * WHEN post it to /pets
+ * THEN a new pet must be created
  */
 test
   .post("/pets")
   .send({
     pet: "Lorem Ipsum",
-    imageUri: "/repo/images/img1.jpg"
+    imageUri: "repo/images/img1.jpg"
   })
   .expect(201)
   .expect(function (res) {
     if (!("id" in res.body)) throw new Error("Missing id");
+    if (!(res.body.imageUri.match(/assets/))) throw new Error("Image URI should contain /assets directory.")
   })
   .end(function (err, res) {
     if (err) {
-      console.log("Register Pet :: Test failed.", err);
+      console.log("/pets :: Register Pet :: Test failed.", err);
     } else {
-      console.log("Register Pet :: Test passed.");
+      console.log("/pets :: Register Pet :: Test passed.");
     }
     serverInstance.close((err) => {
       if (err) console.error(err);

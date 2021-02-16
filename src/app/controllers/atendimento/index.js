@@ -2,6 +2,11 @@ const { Router } = require("express");
 const atendimentoRouter = Router();
 const Atendimento = require("../../services/atendimento");
 
+atendimentoRouter.patch('/:id', function (req, res) {
+  const { id } = req.params;
+  Atendimento.atualizar(id, req.body, res);
+});
+
 atendimentoRouter.get('/', function (req, res) {
   Atendimento.listar(res);
 });

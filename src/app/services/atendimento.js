@@ -2,13 +2,21 @@ const moment = require("moment");
 const db = require("../../infra/db/mysql");
 const errors = require("../domain/validators/atendimento");
 
+/**
+ * Use momentJS to format date
+ * @param {String} date string input of Date in format DD-MM-YYYY hh:mm:ss
+ */
+const formatDate = (date) => {
+  return date
+    ? moment(date, "DD-MM-YYYY hh:mm:ss").format("YYYY-MM-DD hh:mm:ss")
+    : moment().format("YYYY-MM-DD hh:mm:ss");
+};
+
 class Atendimento {
   registrar(atendimento, res) {
-    const updatedAt = moment().format("YYYY-MM-DD hh:mm:ss");
-    const createdAt = moment(
-      atendimento.createdAt,
-      "DD-MM-YYYY hh:mm:ss"
-    ).format("YYYY-MM-DD hh:mm:ss");
+    const updatedAt = formatDate();
+    const createdAt = formatDate(atendimento.createdAt);
+
     const postData = { ...atendimento, createdAt, updatedAt };
 
     const validationErrors = errors(postData);
@@ -47,11 +55,33 @@ class Atendimento {
       if (err) {
         res.status(400).json(err);
       } else {
-        const [ item ] = result;
+        const [item] = result;
         item ? res.status(200).json(item) : res.status(404).json({});
+      }
+    });
+  }
+
+  atualizar(id, valores, res) {
+    if (valores.createdAt) valores.createdAt = formatDate(valores.createdAt);
+    if (valores.updatedAt) valores.updatedAt = formatDate(valores.updatedAt);
+
+    const verify = "SELECT * FROM atendimentos WHERE id=?";
+    const sql = "UPDATE atendimentos SET ? WHERE id=?";
+
+    db.query(verify, id, (err, result) => {
+      if (err) {
+        res.status(400).json(err);
+      } else {
+        db.query(sql, [valores, id], (err, result) => {
+          if (err) {
+            res.status(400).json(err);
+          } else {
+            res.status(202).json(result);
+          }
+        });
       }
     });
   }
 };
 
-module.exports = new Atendimento;
+module.exports = new Atendimento();

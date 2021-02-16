@@ -1,44 +1,33 @@
-const moment = require("moment");
 const db = require("../../infra/db/mysql");
+const formatDate = require("../../utils/formatDate.utils");
 const errors = require("../domain/validators/atendimento");
-const Client = require("./client");
-
-/**
- * Use momentJS to format date
- * @param {String} date string input of Date in format DD-MM-YYYY hh:mm:ss
- */
-const formatDate = (date) => {
-  return date
-    ? moment(date, "DD-MM-YYYY hh:mm:ss").format("YYYY-MM-DD hh:mm:ss")
-    : moment().format("YYYY-MM-DD hh:mm:ss");
-};
+const atendimentoRepository = require("../repositories/atendimento.repository");
 
 class Atendimento {
-  registrar(atendimento, res) {
+  registrar(atendimento) {
     const updatedAt = formatDate();
     const createdAt = formatDate(atendimento.createdAt);
 
-    const postData = { ...atendimento, createdAt, updatedAt };
+    const newAtendimento = { ...atendimento, createdAt, updatedAt };
 
-    const validationErrors = errors(postData);
+    const validationErrors = errors(newAtendimento);
 
     if (validationErrors.length) {
-      res.status(400).json(validationErrors);
-    } else {
-      const sql = "INSERT INTO atendimentos SET ?";
-      Client.getInfo(10020030040, (statusCode, clientResult) => {
-        if (statusCode == 200) {
-          db.query(sql, postData, (err, result) => {
-            if (err) {
-              res.status(400).json(err);
-            } else {
-              postData.client = clientResult;
-              postData.id = result.insertId;
-              res.status(201).json(postData);
-            }
-          });
-        }
+      // res.status(400).json(validationErrors);
+      return new Promise((resolve, reject) => {
+        reject(validationErrors);
       });
+    } else {
+      return atendimentoRepository.add(newAtendimento);
+      // db.query(sql, postData, (err, result) => {
+      //   if (err) {
+      //     res.status(400).json(err);
+      //   } else {
+      //     postData.client = clientResult;
+      //     postData.id = result.insertId;
+      //     res.status(201).json(postData);
+      //   }
+      // });
     }
   }
 
@@ -88,6 +77,6 @@ class Atendimento {
       }
     });
   }
-};
+}
 
 module.exports = new Atendimento();

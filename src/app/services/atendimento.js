@@ -1,6 +1,7 @@
 const moment = require("moment");
 const db = require("../../infra/db/mysql");
 const errors = require("../domain/validators/atendimento");
+const Client = require("./client");
 
 /**
  * Use momentJS to format date
@@ -25,12 +26,17 @@ class Atendimento {
       res.status(400).json(validationErrors);
     } else {
       const sql = "INSERT INTO atendimentos SET ?";
-
-      db.query(sql, postData, (err, result) => {
-        if (err) {
-          res.status(400).json(err);
-        } else {
-          res.status(201).json(result);
+      Client.getInfo(10020030040, (statusCode, clientResult) => {
+        if (statusCode == 200) {
+          db.query(sql, postData, (err, result) => {
+            if (err) {
+              res.status(400).json(err);
+            } else {
+              postData.client = clientResult;
+              postData.id = result.insertId;
+              res.status(201).json(postData);
+            }
+          });
         }
       });
     }

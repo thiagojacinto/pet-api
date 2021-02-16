@@ -7,12 +7,7 @@ atendimentoRouter.get('/', function (req, res) {
 });
 
 atendimentoRouter.post('/', async function(req, res) {
-  const dbResponse = await Atendimento.registrar(req.body);
-  return res.status(201).send({
-    id: dbResponse.OkPacket.insertId,
-    client: req.body.client,
-    pet: req.body.pet,
-  });
+  Atendimento.registrar(req.body, res);
 });
 
 module.exports = atendimentoRouter

@@ -1,5 +1,4 @@
 const moment = require("moment");
-const atendimento = require("../../services/atendimento");
 
 const isDateValid = (date, updatedAt) => {
   return moment(date).isSameOrAfter(updatedAt);

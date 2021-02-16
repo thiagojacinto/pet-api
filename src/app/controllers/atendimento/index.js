@@ -3,7 +3,12 @@ const atendimentoRouter = Router();
 const Atendimento = require("../../services/atendimento");
 
 atendimentoRouter.get('/', function (req, res) {
-  res.status(200).json({ atendimentoId: 1, info: 'Info' });
+  Atendimento.listar(res);
+});
+
+atendimentoRouter.get('/:id', function (req, res) {
+  const { id } = req.params;
+  Atendimento.listarPorId(id, res);
 });
 
 atendimentoRouter.post('/', async function(req, res) {

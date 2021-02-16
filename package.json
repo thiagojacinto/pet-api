@@ -6,6 +6,7 @@
   "scripts": {
     "start": "nodemon src/index.js",
     "test": "node test/main.spec.js",
+    "debug": "nodemon --inspect src/index.js",
     "api:clients": "node services/clients-api/index.js"
   },
   "repository": {

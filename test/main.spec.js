@@ -26,7 +26,7 @@ test
 test
   .post("/atendimento")
   .send({
-    client: "Client n.1",
+    client: "10020030040",
     pet: "Abdiel",
     service: "Cleaning",
     status: "initialized",

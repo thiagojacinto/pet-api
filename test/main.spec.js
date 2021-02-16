@@ -34,13 +34,18 @@ test
     service: "Cleaning",
     status: "initialized",
     isFinalized: false,
-    createdAt: "16-01-2021"
+    createdAt: "17-01-2021 12:06:56",
   })
   .expect(201)
-  .expect({ client: "Client n.1", pet: "Abdiel" })
+  .expect(function(res) {
+    if (!('insertId' in res.body)) throw new Error('Missing insertId');
+  })
   .end(function (err, res) {
-    if (err) throw err;
-    console.log("Register atendimento :: Test passed.");
+    if (err) {
+      console.log("Register atendimento :: Test failed.", err);
+    } else {
+      console.log("Register atendimento :: Test passed.");
+    }
     serverInstance.close((err) => {
       if (err) console.error(err);
     });

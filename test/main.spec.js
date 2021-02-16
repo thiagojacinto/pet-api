@@ -35,7 +35,8 @@ test
   })
   .expect(201)
   .expect(function (res) {
-    if (!("insertId" in res.body)) throw new Error("Missing insertId");
+    if (!("id" in res.body)) throw new Error("Missing id");
+    if (!("cpf" in res.body.client)) throw new Error("Missing client.cpf");
   })
   .end(function (err, res) {
     if (err) {

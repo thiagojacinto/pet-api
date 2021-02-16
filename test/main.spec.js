@@ -174,6 +174,64 @@ test
     } else {
       console.log("Search atendimento by inexistent ID :: Test passed.");
     }
+    // serverInstance.close((err) => {
+    //   if (err) console.error(err);
+    // });
+  });
+
+/**
+ * GIVEN a registered atendimento ID
+ * WHEN patch with that ID at /atendimento/ID
+ * THEN returns status 202
+ * AND the atendimento is updated
+ */
+test
+  .patch("/atendimento/2")
+  .send({
+    pet: "Babalu",
+    updatedAt: "25-11-2019 16:43:23",
+    service: "hairdressing",
+  })
+  .expect(202)
+  .expect(function (res) {
+    if (res.error) throw new Error("Error not expected");
+    if (res.body.affectedRows != 1) throw new Error("Change expected to be 1");
+  })
+  .end(function (err, res) {
+    if (err) {
+      console.log("Patch atendimento by valid ID :: Test failed.", err);
+    } else {
+      console.log("Patch atendimento by valid ID :: Test passed.");
+    }
+    // serverInstance.close((err) => {
+    //   if (err) console.error(err);
+    // });
+  });
+const randomNumber = Math.floor(Math.random()*2500);
+/**
+ * GIVEN a non-registered atendimento ID
+ * WHEN patch with that ID at /atendimento/ID
+ * THEN returns status 202
+ * AND no changes are registered
+ */
+test
+  .patch("/atendimento/" + randomNumber)
+  .send({
+    pet: "Babalu"+randomNumber,
+    updatedAt: "30-11-2015 12:21:23",
+    service: "nothing",
+  })
+  .expect(202)
+  .expect(function (res) {
+    if (res.error) throw new Error("Error not expected");
+    if (res.body.affectedRows === 1) throw new Error("Change expected to be 1");
+  })
+  .end(function (err, res) {
+    if (err) {
+      console.log("Patch atendimento by inexistent ID :: Test failed.", err);
+    } else {
+      console.log("Patch atendimento by inexistent ID :: Test passed.");
+    }
     serverInstance.close((err) => {
       if (err) console.error(err);
     });

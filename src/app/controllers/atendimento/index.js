@@ -1,6 +1,7 @@
 const { Router } = require("express");
-const atendimentoRouter = Router();
 const Atendimento = require("../../services/atendimento");
+
+const atendimentoRouter = Router();
 
 atendimentoRouter.patch('/:id', function (req, res) {
   const { id } = req.params;

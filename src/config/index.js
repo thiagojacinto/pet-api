@@ -1,7 +1,8 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const Logger = require("../infra/logger");
 const AtentimentoRouter = require("../app/controllers/atendimento");
-const bodyParser = require("body-parser");
+const PetsRouter = require("../app/controllers/pets");
 
 const principalRouter = express.Router();
 principalRouter.all("/", function(req, res) {
@@ -20,6 +21,7 @@ module.exports = () => {
   app.use(Logger);
   app.use('/', principalRouter);
   app.use('/atendimento', AtentimentoRouter);
+  app.use('/pets', PetsRouter);
   
   return {app, PORT};
 }

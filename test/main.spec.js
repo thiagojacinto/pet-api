@@ -1,4 +1,5 @@
 const request = require("supertest");
+const faker = require("faker");
 const server = require("../src/config");
 
 const serverInstance = server().app.listen();
@@ -26,12 +27,17 @@ test
 test
   .post("/atendimento")
   .send({
-    client: "10020030040",
-    pet: "Abdiel",
-    service: "Cleaning",
-    status: "initialized",
-    isFinalized: false,
-    createdAt: "17-02-2021 12:06:56",
+    client: faker.helpers.slugify("12345678908"),
+    pet: faker.name.firstName(),
+    service: faker.commerce.department(),
+    status: faker.random.arrayElement([
+      "initialized",
+      "progress",
+      "waiting",
+      "undefined",
+    ]),
+    isFinalized: faker.random.boolean(),
+    createdAt: "21-05-2021 09:49:32",
   })
   .expect(201)
   .expect(function (res) {

@@ -6,7 +6,7 @@ class Client {
    * @param {*} cpf 
    * @param {*} callback 
    */
-  getInfo(cpf, callback) {
+  getInfo(cpf) {
     const options = {
       host: "localhost",
       port: 8082,
@@ -16,7 +16,13 @@ class Client {
         "Content-Type": "application/json",
       },
     };
-    getJSON(options, callback);
+    return new Promise((resolve, reject) => {
+      getJSON(options, (status, res) => {
+        (status != 200) 
+        ? reject(res)
+        : resolve(res);
+      });
+    });
   }
 }
 

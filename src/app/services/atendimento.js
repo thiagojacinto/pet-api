@@ -23,28 +23,19 @@ class Atendimento {
 
   listar() {
     return atendimentoRepository.list();
-    // const sql = "SELECT * FROM atendimentos";
+  }
 
+  listarPorId(id) {
+    const sql = `SELECT * FROM atendimentos WHERE id=${id}`;
+    return atendimentoRepository.search(id);
     // db.query(sql, (err, result) => {
     //   if (err) {
     //     res.status(400).json(err);
     //   } else {
-    //     res.status(200).json(result);
+    //     const [item] = result;
+    //     item ? res.status(200).json(item) : res.status(404).json({});
     //   }
     // });
-  }
-
-  listarPorId(id, res) {
-    const sql = `SELECT * FROM atendimentos WHERE id=${id}`;
-
-    db.query(sql, (err, result) => {
-      if (err) {
-        res.status(400).json(err);
-      } else {
-        const [item] = result;
-        item ? res.status(200).json(item) : res.status(404).json({});
-      }
-    });
   }
 
   atualizar(id, valores, res) {

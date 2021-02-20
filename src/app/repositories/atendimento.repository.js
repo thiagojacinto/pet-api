@@ -17,6 +17,15 @@ class AtendimentoRepository {
     const sql = "SELECT * FROM atendimentos";
     return execQuery(sql);
   }
+
+  /**
+   * Search for an Atendimento by its ID
+   * @param {*} id <Number> Atendimento ID
+   */
+  search(id) {
+    const sql = `SELECT * FROM atendimentos WHERE id=${id}`;
+    return execQuery(sql);
+  }
 }
 
 module.exports = new AtendimentoRepository();

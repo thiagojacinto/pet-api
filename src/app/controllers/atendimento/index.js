@@ -10,32 +10,40 @@ atendimentoRouter.patch("/:id", function (req, res) {
 });
 
 atendimentoRouter.get("/", function (req, res) {
+  const serializer = new Serializer(res);
+
   AtendimentoService.listar()
     .then((results) => res.json(results))
-    .catch((err) => res.status(400).json(err));
+    .catch((err) => serializer.StandardError(500, err));
 });
 
 atendimentoRouter.get("/:id", function (req, res) {
+  const serializer = new Serializer(res);
+
   const { id } = req.params;
   AtendimentoService.listarPorId(id)
     .then((found) => {
       const [item] = found;
-      item ? res.status(200).json(item) : res.status(404).json({});
+      item ? res.status(200).json(item) : serializer.StandardError(404, {});
     })
-    .catch((err) => res.status(400).json(err));
+    .catch((err) => serializer.StandardError(400, err));
 });
 
 atendimentoRouter.post("/", async function (req, res) {
+  const serializer = new Serializer(res);
+
   const novoAtendimento = req.body;
   AtendimentoService.registrar(novoAtendimento)
     .then(async (result) => {
-      novoAtendimento.client = await ClientService.getInfo(novoAtendimento.client);
+      novoAtendimento.client = await ClientService.getInfo(
+        novoAtendimento.client
+      );
       res.status(201).json({
         id: result.insertId,
         ...novoAtendimento,
       });
     })
-    .catch((err) => res.status(400).json(err));
+    .catch((err) => serializer.StandardError(400, err));
 });
 
 module.exports = atendimentoRouter;

@@ -8,17 +8,21 @@ class Atendimento {
     const updatedAt = formatDate();
     const createdAt = formatDate(atendimento.createdAt);
 
-    const newAtendimento = { ...atendimento, createdAt, updatedAt };
+    return new Promise((resolve, reject) => {
+      const newAtendimento = { ...atendimento, createdAt, updatedAt };
+      let validationErrors;
+      try {
+        validationErrors = errors(newAtendimento);
+      } catch (error) {
+        reject(error);
+      }
 
-    const validationErrors = errors(newAtendimento);
-
-    if (validationErrors.length) {
-      return new Promise((resolve, reject) => {
+      if (validationErrors.length) {
         reject(validationErrors);
-      });
-    } else {
-      return atendimentoRepository.add(newAtendimento);
-    }
+      } else {
+        resolve(atendimentoRepository.add(newAtendimento));
+      }
+    });
   }
 
   listar() {

@@ -27,7 +27,7 @@ test
 test
   .post("/atendimento")
   .send({
-    client: faker.helpers.slugify("12345678908"),
+    client: faker.helpers.shuffle("12345678908".split("")).join(""),
     pet: faker.name.firstName(),
     service: faker.commerce.department(),
     status: faker.random.arrayElement([
@@ -72,7 +72,7 @@ test
   })
   .expect(400)
   .expect(function (res) {
-    if (res.body[0].field !== "client") throw new Error("Missing client");
+    if (res.body.details[0].field !== "client") throw new Error("Missing client");
   })
   .end(function (err, res) {
     if (err) {
@@ -98,16 +98,16 @@ test
 test
   .post("/atendimento")
   .send({
-    client: "Oh-my-zsh",
-    pet: "Golden",
-    service: "Cut",
-    status: "progress",
+    client: faker.name.findName(),
+    pet: "ShouldHaveFailedCreatedAtValidation",
+    service: "FAILURE",
+    status: "FAILURE",
     isFinalized: false,
     createdAt: "17-12-2018 15:11:05",
   })
   .expect(400)
   .expect(function (res) {
-    if (res.body[0].field !== "createdAt") throw new Error("Missing createdAt");
+    if (res.body.details[0].field !== "createdAt") throw new Error("Missing createdAt");
   })
   .end(function (err, res) {
     if (err) {
@@ -184,7 +184,7 @@ test
   .get("/atendimento/3000")
   .expect(404)
   .expect(function (res) {
-    if (res.error.text !== "{}")
+    if (JSON.stringify(res.body.details) !== "{}")
       throw new Error("Expected empty object");
   })
   .end(function (err, res) {
@@ -281,7 +281,7 @@ test
 test
   .post("/pets")
   .send({
-    pet: "Lorem Ipsum",
+    pet: faker.name.findName(),
     imageUri: "repo/images/img1.jpg"
   })
   .expect(201)

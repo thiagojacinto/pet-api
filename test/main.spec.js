@@ -5,6 +5,11 @@ const server = require("../src/config");
 const serverInstance = server().app.listen();
 const test = request(serverInstance);
 
+const RANDOM_IMG = () => {
+  const random = Math.floor(Math.random() * 6) + 1;
+  return `repo/images/img${random}.jpg`;
+}
+
 /**
  * WHEN access home "/"
  * THEN should redirect to "/atendimento"
@@ -282,7 +287,7 @@ test
   .post("/pets")
   .send({
     pet: faker.name.findName(),
-    imageUri: "repo/images/img1.jpg"
+    imageUri: RANDOM_IMG()
   })
   .expect(201)
   .expect(function (res) {

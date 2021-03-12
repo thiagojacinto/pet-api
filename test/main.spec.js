@@ -2,13 +2,13 @@ const request = require("supertest");
 const faker = require("faker");
 const server = require("../src/config");
 
-const serverInstance = server().app.listen();
+const serverInstance = server().app;
 const test = request(serverInstance);
 
 const RANDOM_IMG = () => {
   const random = Math.floor(Math.random() * 6) + 1;
   return `repo/images/img${random}.jpg`;
-}
+};
 
 /**
  * WHEN access home "/"
@@ -22,6 +22,7 @@ test
   .end(function (err, res) {
     if (err) throw err;
     console.log("Main :: Redirect to /atendimento :: Test passed.");
+    // serverInstance.close();
   });
 
 /**
@@ -51,10 +52,12 @@ test
   })
   .end(function (err, res) {
     if (err) {
-      console.log("/atendimento :: Register atendimento :: Test failed.", err);
+      console.log("/atendimento :: Register atendimento :: Test failed.");
+      throw err;
     } else {
       console.log("/atendimento :: Register atendimento :: Test passed.");
     }
+    // serverInstance.close();
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
     // });
@@ -77,19 +80,21 @@ test
   })
   .expect(400)
   .expect(function (res) {
-    if (res.body.details[0].field !== "client") throw new Error("Missing client");
+    if (res.body.details[0].field !== "client")
+      throw new Error("Missing client");
   })
   .end(function (err, res) {
     if (err) {
       console.log(
-        "/atendimento :: Register atendimento :: Invalid name :: Test failed.",
-        err
+        "/atendimento :: Register atendimento :: Invalid name :: Test failed."
       );
+      throw err;
     } else {
       console.log(
         "/atendimento :: Register atendimento :: Invalid name :: Test passed."
       );
     }
+    // serverInstance.close();
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
     // });
@@ -112,19 +117,21 @@ test
   })
   .expect(400)
   .expect(function (res) {
-    if (res.body.details[0].field !== "createdAt") throw new Error("Missing createdAt");
+    if (res.body.details[0].field !== "createdAt")
+      throw new Error("Missing createdAt");
   })
   .end(function (err, res) {
     if (err) {
       console.log(
-        "/atendimento :: Register atendimento :: Invalid createdAt :: Test failed.",
-        err
+        "/atendimento :: Register atendimento :: Invalid createdAt :: Test failed."
       );
+      throw err;
     } else {
       console.log(
         "/atendimento :: Register atendimento :: Invalid createdAt :: Test passed."
       );
     }
+    // serverInstance.close();
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
     // });
@@ -139,16 +146,19 @@ test
   .expect(200)
   .expect(function (res) {
     if (!Array.isArray(res.body)) throw new Error("Array was expected");
-    if (!res.body.every(item => item.id)) throw  new Error("Wrong Array of Atendimentos");
+    if (!res.body.every((item) => item.id))
+      throw new Error("Wrong Array of Atendimentos");
   })
   .end(function (err, res) {
     if (err) {
-      console.log("/atendimento :: List atendimentos :: Test failed.", err);
+      console.log("/atendimento :: List atendimentos :: Test failed.");
+      throw err;
     } else {
       console.log(
         "/atendimento :: List atendimentos :: Return all registered :: Test passed."
       );
     }
+    // serverInstance.close();
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
     // });
@@ -163,18 +173,16 @@ test
   .get("/atendimento/3")
   .expect(200)
   .expect(function (res) {
-    if (res.body.id != 3)
-      throw new Error("Expected ID = 3");
+    if (res.body.id != 3) throw new Error("Expected ID = 3");
   })
   .end(function (err, res) {
     if (err) {
-      console.log(
-        "/atendimento :: Search atendimento by ID :: Test failed.",
-        err
-      );
+      console.log("/atendimento :: Search atendimento by ID :: Test failed.");
+      throw err;
     } else {
       console.log("/atendimento :: Search atendimento by ID :: Test passed.");
     }
+    // serverInstance.close();
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
     // });
@@ -195,14 +203,15 @@ test
   .end(function (err, res) {
     if (err) {
       console.log(
-        "/atendimento :: Search atendimento by inexistent ID :: Test failed.",
-        err
+        "/atendimento :: Search atendimento by inexistent ID :: Test failed."
       );
+      throw err;
     } else {
       console.log(
         "/atendimento :: Search atendimento by inexistent ID :: Test passed."
       );
     }
+    // serverInstance.close();
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
     // });
@@ -229,19 +238,20 @@ test
   .end(function (err, res) {
     if (err) {
       console.log(
-        "/atendimento :: Patch atendimento by valid ID :: Test failed.",
-        err
+        "/atendimento :: Patch atendimento by valid ID :: Test failed."
       );
+      throw err;
     } else {
       console.log(
         "/atendimento :: Patch atendimento by valid ID :: Test passed."
       );
     }
+    // serverInstance.close();
     // serverInstance.close((err) => {
     //   if (err) console.error(err);
     // });
   });
-const randomNumber = Math.floor(Math.random()*2500);
+const randomNumber = Math.floor(Math.random() * 2500);
 /**
  * GIVEN a non-registered atendimento ID
  * WHEN patch with that ID at /atendimento/ID
@@ -251,7 +261,7 @@ const randomNumber = Math.floor(Math.random()*2500);
 test
   .patch("/atendimento/" + randomNumber)
   .send({
-    pet: "Babalu"+randomNumber,
+    pet: "Babalu" + randomNumber,
     updatedAt: "30-11-2015 12:21:23",
     service: "nothing",
   })
@@ -263,17 +273,15 @@ test
   .end(function (err, res) {
     if (err) {
       console.log(
-        "/atendimento :: Patch atendimento by inexistent ID :: Test failed.",
-        err
+        "/atendimento :: Patch atendimento by inexistent ID :: Test failed."
       );
+      throw err;
     } else {
       console.log(
         "/atendimento :: Patch atendimento by inexistent ID :: Test passed."
       );
     }
-    // serverInstance.close((err) => {
-    //   if (err) console.error(err);
-    // });
+    // serverInstance.close();
   });
 
 // PETS CONTROLLER
@@ -287,20 +295,20 @@ test
   .post("/pets")
   .send({
     pet: faker.name.findName(),
-    imageUri: RANDOM_IMG()
+    imageUri: RANDOM_IMG(),
   })
   .expect(201)
   .expect(function (res) {
     if (!("id" in res.body)) throw new Error("Missing id");
-    if (!(res.body.imageUri.match(/assets/))) throw new Error("Image URI should contain /assets directory.")
+    if (!res.body.imageUri.match(/assets/))
+      throw new Error("Image URI should contain /assets directory.");
   })
-  .end(function (err, res) {
+  .end(function (err, done) {
     if (err) {
-      console.log("/pets :: Register Pet :: Test failed.", err);
+      console.log("/pets :: Register Pet :: Test failed.");
+      throw err;
     } else {
       console.log("/pets :: Register Pet :: Test passed.");
     }
-    serverInstance.close((err) => {
-      if (err) console.error(err);
-    });
+    process.exit(0);
   });

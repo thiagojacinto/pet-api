@@ -74,7 +74,7 @@ AND the atendimento is updated
 ```gherkin
 GIVEN a non-registered atendimento ID
 WHEN patch with that ID at /atendimento/ID
-THEN returns status 202
+THEN returns status 404
 AND no changes are registered
 ```
 

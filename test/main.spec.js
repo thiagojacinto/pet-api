@@ -71,12 +71,11 @@ test
 test
   .post("/atendimento")
   .send({
-    client: "Cl",
-    pet: "Snoopy",
-    service: "Washing",
-    status: "progress",
+    client: "12",
+    pet: "ShouldHaveFailedClientValidation",
+    service: "FAILURE",
+    status: "FAILURE",
     isFinalized: false,
-    createdAt: "17-03-2021 10:12:05",
   })
   .expect(400)
   .expect(function (res) {
@@ -255,7 +254,7 @@ const randomNumber = Math.floor(Math.random() * 2500);
 /**
  * GIVEN a non-registered atendimento ID
  * WHEN patch with that ID at /atendimento/ID
- * THEN returns status 202
+ * THEN returns status 404
  * AND no changes are registered
  */
 test
@@ -265,10 +264,12 @@ test
     updatedAt: "30-11-2015 12:21:23",
     service: "nothing",
   })
-  .expect(202)
+  .expect(404)
   .expect(function (res) {
-    if (res.error) throw new Error("Error not expected");
-    if (res.body.affectedRows === 1) throw new Error("Change expected to be 1");
+    // if (res.error) throw new Error("Error not expected");
+    // if (res.body.affectedRows === 1) throw new Error("Change expected to be 0");
+    if (!res.body.details.message.includes("not found"))
+      throw new Error("ID should be inexistent, not found expected.");
   })
   .end(function (err, res) {
     if (err) {
@@ -303,7 +304,7 @@ test
     if (!res.body.imageUri.match(/assets/))
       throw new Error("Image URI should contain /assets directory.");
   })
-  .end(function (err, done) {
+  .end(function (err, res) {
     if (err) {
       console.log("/pets :: Register Pet :: Test failed.");
       throw err;

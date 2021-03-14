@@ -5,8 +5,20 @@ const { AtendimentoService, ClientService } = require("../../services/");
 const atendimentoRouter = Router();
 
 atendimentoRouter.patch("/:id", function (req, res) {
+  const serializer = new Serializer(res);
+
   const { id } = req.params;
-  AtendimentoService.atualizar(id, req.body, res);
+  AtendimentoService.atualizar(id, req.body)
+    .then(results => {
+      if (results.affectedRows === 0) {
+        serializer.StandardError(404, { message: `ID ${id} not found.`});
+      } else {
+        res.status(202).json(results);
+      };
+    })
+    .catch(err => {
+      serializer.StandardError(400, err);
+    })
 });
 
 atendimentoRouter.get("/", function (req, res) {

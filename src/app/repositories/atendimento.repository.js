@@ -26,6 +26,16 @@ class AtendimentoRepository {
     const sql = `SELECT * FROM atendimentos WHERE id=${id}`;
     return execQuery(sql);
   }
+
+  /**
+   * Update data from the Atendimento which ID correspond
+   * @param {*} id 
+   * @param {*} data 
+   */
+  async update(id, data) {
+    const sql = "UPDATE atendimentos SET ? WHERE id=?";
+    return execQuery(sql, [data, id]);
+  }
 }
 
 module.exports = new AtendimentoRepository();

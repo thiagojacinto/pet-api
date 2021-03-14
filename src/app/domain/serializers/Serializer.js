@@ -14,15 +14,21 @@ class Serializer {
    * @param {*} data Data to send with error
    */
   StandardError (status, data) {
+    const filteredData = this._filterSensiveInfo(data);
     const STD_ERROR_FORMAT = { 
       error: status, 
-      details: data 
+      details: filteredData 
     };
 
     this.response.status(status);
     this._toJSON(STD_ERROR_FORMAT)
     return this.response;
   };
+
+  _filterSensiveInfo(data) {
+    if (data.sql) delete data.sql;
+    return data;
+  }
 }
 
 module.exports = Serializer;

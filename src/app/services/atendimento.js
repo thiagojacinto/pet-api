@@ -30,38 +30,15 @@ class Atendimento {
   }
 
   listarPorId(id) {
-    const sql = `SELECT * FROM atendimentos WHERE id=${id}`;
     return atendimentoRepository.search(id);
-    // db.query(sql, (err, result) => {
-    //   if (err) {
-    //     res.status(400).json(err);
-    //   } else {
-    //     const [item] = result;
-    //     item ? res.status(200).json(item) : res.status(404).json({});
-    //   }
-    // });
   }
 
-  atualizar(id, valores, res) {
-    if (valores.createdAt) valores.createdAt = formatDate(valores.createdAt);
-    if (valores.updatedAt) valores.updatedAt = formatDate(valores.updatedAt);
+  async atualizar(id, valores) {
 
-    const verify = "SELECT * FROM atendimentos WHERE id=?";
-    const sql = "UPDATE atendimentos SET ? WHERE id=?";
+    if (valores.createdAt) delete valores.createdAt
+    valores.updatedAt = formatDate();
 
-    db.query(verify, id, (err, result) => {
-      if (err) {
-        res.status(400).json(err);
-      } else {
-        db.query(sql, [valores, id], (err, result) => {
-          if (err) {
-            res.status(400).json(err);
-          } else {
-            res.status(202).json(result);
-          }
-        });
-      }
-    });
+    return atendimentoRepository.update(id, valores);
   }
 }
 

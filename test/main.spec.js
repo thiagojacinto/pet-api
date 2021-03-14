@@ -301,8 +301,8 @@ test
   .expect(201)
   .expect(function (res) {
     if (!("id" in res.body)) throw new Error("Missing id");
-    if (!res.body.imageUri.match(/assets/))
-      throw new Error("Image URI should contain /assets directory.");
+    if (!res.body.pet)
+      throw new Error("Pet name should be returned");
   })
   .end(function (err, res) {
     if (err) {
